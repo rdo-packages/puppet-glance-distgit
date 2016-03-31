@@ -2,4 +2,4 @@
 host=rpmfactory.beta.rdoproject.org
 port=29418
 project=puppet-glance-distgit
-defaultbranch=master
+defaultbranch=rpm-master
