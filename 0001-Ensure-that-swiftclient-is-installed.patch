@@ -1,0 +1,48 @@
+From 69f157d4c6b92c99f60ede2cd0c3859f5054b8b8 Mon Sep 17 00:00:00 2001
+From: Andrew Woodward <awoodward@mirantis.com>
+Date: Mon, 10 Oct 2016 16:15:15 -0700
+Subject: [PATCH] Ensure that swiftclient is installed
+
+It's possible for glance-api to get stuck in a loop starting when
+the backend is swift, and python-swiftclient is not present on
+the system.
+
+Depends-On: I65fb0736e9fa9e68c3c7877cf6caf228c49eb82d
+Change-Id: I1eeb9f12cf82961ae820067ad8fe91d096d1d6e1
+Closes-bug: #1632143
+(cherry picked from commit 33f96d71ed61bf326b76045e4108a7e772df7f0c)
+---
+ manifests/backend/swift.pp | 1 +
+ metadata.json              | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/manifests/backend/swift.pp b/manifests/backend/swift.pp
+index 69a36d8..3d57549 100644
+--- a/manifests/backend/swift.pp
++++ b/manifests/backend/swift.pp
+@@ -70,6 +70,7 @@ class glance::backend::swift(
+ ) {
+ 
+   include ::glance::deps
++  Service<| tag == 'swift-service' |> -> Service['glance-api']
+ 
+   glance_api_config {
+     'glance_store/swift_store_region':         value => $swift_store_region;
+diff --git a/metadata.json b/metadata.json
+index a6ffc41..7219f9c 100644
+--- a/metadata.json
++++ b/metadata.json
+@@ -60,6 +60,10 @@
+       "version_requirement": ">=4.2.0 <5.0.0"
+     },
+     {
++      "name": "openstack/swift",
++      "version_requirement": ">=9.4.0 <10.0.0"
++    },
++    {
+       "name": "openstack/openstacklib",
+       "version_requirement": ">=9.5.0 <10.0.0"
+     },
+-- 
+2.9.3
+
