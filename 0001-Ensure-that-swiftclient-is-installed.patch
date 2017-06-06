@@ -1,0 +1,64 @@
+From ca595abc4532237423837ddb3e03cae4e0ed38c0 Mon Sep 17 00:00:00 2001
+From: Andrew Woodward <awoodward@mirantis.com>
+Date: Mon, 10 Oct 2016 16:15:15 -0700
+Subject: [PATCH] Ensure that swiftclient is installed
+
+It's possible for glance-api to get stuck in a loop starting when
+the backend is swift, and python-swiftclient is not present on
+the system.
+
+Depends-On: I65fb0736e9fa9e68c3c7877cf6caf228c49eb82d
+Change-Id: I1eeb9f12cf82961ae820067ad8fe91d096d1d6e1
+Closes-bug: #1632143
+(cherry picked from commit 33f96d71ed61bf326b76045e4108a7e772df7f0c)
+---
+ manifests/backend/swift.pp                | 3 +++
+ metadata.json                             | 4 ++++
+ spec/classes/glance_backend_swift_spec.rb | 2 ++
+ 3 files changed, 9 insertions(+)
+
+diff --git a/manifests/backend/swift.pp b/manifests/backend/swift.pp
+index 69a36d8..8ceecec 100644
+--- a/manifests/backend/swift.pp
++++ b/manifests/backend/swift.pp
+@@ -70,6 +70,9 @@ class glance::backend::swift(
+ ) {
+ 
+   include ::glance::deps
++  ensure_resource('class', '::swift::client', { 'ensure' => 'present' })
++  Class['swift::client'] -> Anchor['glance::install::end']
++  Service<| tag == 'swift-service' |> -> Service['glance-api']
+ 
+   glance_api_config {
+     'glance_store/swift_store_region':         value => $swift_store_region;
+diff --git a/metadata.json b/metadata.json
+index a6ffc41..7219f9c 100644
+--- a/metadata.json
++++ b/metadata.json
+@@ -60,6 +60,10 @@
+       "version_requirement": ">=4.2.0 <5.0.0"
+     },
+     {
++      "name": "openstack/swift",
++      "version_requirement": ">=9.4.0 <10.0.0"
++    },
++    {
+       "name": "openstack/openstacklib",
+       "version_requirement": ">=9.5.0 <10.0.0"
+     },
+diff --git a/spec/classes/glance_backend_swift_spec.rb b/spec/classes/glance_backend_swift_spec.rb
+index 0751487..970f396 100644
+--- a/spec/classes/glance_backend_swift_spec.rb
++++ b/spec/classes/glance_backend_swift_spec.rb
+@@ -15,6 +15,8 @@ describe 'glance::backend::swift' do
+ 
+     describe 'when default parameters' do
+ 
++      it { is_expected.to contain_class 'swift::client' }
++
+       it 'configures glance-api.conf' do
+         is_expected.to contain_glance_api_config('glance_store/default_store').with_value('swift')
+         is_expected.to contain_glance_api_config('glance_store/swift_store_large_object_size').with_value('<SERVICE DEFAULT>')
+-- 
+2.9.3
+
