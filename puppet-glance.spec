@@ -9,6 +9,8 @@ URL:            https://launchpad.net/puppet-glance
 
 Source0:        https://tarballs.openstack.org/%{name}/%{name}-%{upstream_version}.tar.gz
 
+Patch0001:      0001-Ensure-that-swiftclient-is-installed.patch
+
 BuildArch:      noarch
 
 Requires:       puppet-inifile
@@ -23,6 +25,9 @@ Puppet module for OpenStack Glance
 
 %prep
 %setup -q -n openstack-glance-%{upstream_version}
+
+#TODO(karelyatin) remove when merged https://review.openstack.org/#/c/471197/
+%patch0001 -p1
 
 find . -type f -name ".*" -exec rm {} +
 find . -size 0 -exec rm {} +
@@ -46,6 +51,9 @@ cp -rp * %{buildroot}/%{_datadir}/openstack-puppet/modules/glance/
 
 
 %changelog
+* Tue Jun 06 2017 Yatin Karel <ykarel@redhat.com> - 9.5.0-1
+- Apply patch to fix dependency issue
+
 * Thu Feb 02 2017 Alfredo Moralejo <amoralej@redhat.com> 9.5.0-1
 - Update to 9.5.0
 
