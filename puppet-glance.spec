@@ -1,6 +1,6 @@
 %{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 Name:           puppet-glance
-Version:        16.4.0
+Version:        16.5.0
 Release:        1%{?dist}
 Summary:        Puppet module for OpenStack Glance
 License:        ASL 2.0
@@ -46,6 +46,9 @@ cp -rp * %{buildroot}/%{_datadir}/openstack-puppet/modules/glance/
 
 
 %changelog
+* Mon Nov 29 2021 RDO <dev@lists.rdoproject.org> 16.5.0-1
+- Update to 16.5.0
+
 * Mon Apr 19 2021 RDO <dev@lists.rdoproject.org> 16.4.0-1
 - Update to 16.4.0
 
