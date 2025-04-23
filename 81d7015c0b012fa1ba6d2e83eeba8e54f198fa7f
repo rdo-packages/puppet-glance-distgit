@@ -1,0 +1,8 @@
+Verified+2: Zuul CI <zuul@review.rdoproject.org>
+Code-Review+2: Joel Capitao <jcapitao@redhat.com>
+Workflow+1: Joel Capitao <jcapitao@redhat.com>
+Submitted-by: Zuul CI <zuul@review.rdoproject.org>
+Submitted-at: Wed, 23 Apr 2025 07:45:44 +0000
+Reviewed-on: https://review.rdoproject.org/r/c/puppet/puppet-glance-distgit/+/57460
+Project: puppet/puppet-glance-distgit
+Branch: refs/heads/epoxy-rdo
