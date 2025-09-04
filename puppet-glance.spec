@@ -65,3 +65,4 @@ cp -rp * %{buildroot}/%{_datadir}/openstack-puppet/modules/glance/
 %changelog
 
 
+# REMOVEME: error caused by commit https://opendev.org/openstack/puppet-glance/commit/0aec78803d36d6f518d89b6d14bf0fa261e2e7c0
